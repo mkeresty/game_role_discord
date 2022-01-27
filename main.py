@@ -67,7 +67,7 @@ async def play(ctx): # !play
     user = ctx.message.author.id
     print(user, " is user id")
     ref = db.reference(f"/")
-    ref2 = db.reference(f"/"+"bobby") 
+    ref2 = db.reference(f"/"+str(user))    
     status2 = ref2.get()
     #print(status2)
     if status2 == None:
