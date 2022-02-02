@@ -108,7 +108,7 @@ async def upgrade(ctx): #!upgrade
         if "Flappy Gene Master" not in rolelist:
             ogrole = discord.utils.get(person.guild.roles, name = "Flappy Gene Master")
             await person.add_roles(ogrole, atomic=True)
-            await ctx.channel.send(str(person) + ", congrats! Your role is now OG DEGENETICIST.")
+            await ctx.channel.send(str(person) + ", congrats! Your role is now Flappy Gene Master.")
         else:
             await ctx.channel.send(str(person) + ", You already have OG role")
     else:        
