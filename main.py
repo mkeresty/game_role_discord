@@ -105,8 +105,8 @@ async def upgrade(ctx): #!upgrade
     if int(status) <15:
         await ctx.channel.send(str(person) + ", you haven't reached the score threshold!")
     if int(status) >=15:
-        if "OG DEGENETICIST" not in rolelist:
-            ogrole = discord.utils.get(person.guild.roles, name = "OG DEGENETICIST")
+        if "Flappy Gene Master" not in rolelist:
+            ogrole = discord.utils.get(person.guild.roles, name = "Flappy Gene Master")
             await person.add_roles(ogrole, atomic=True)
             await ctx.channel.send(str(person) + ", congrats! Your role is now OG DEGENETICIST.")
         else:
