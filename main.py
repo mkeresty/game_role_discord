@@ -102,15 +102,15 @@ async def upgrade(ctx): #!upgrade
 
     if status == "nope":
         await ctx.channel.send(str(person) + ", you haven't reached the score threshold!")
-    if int(status) <15:
+    if int(status) <50:
         await ctx.channel.send(str(person) + ", you haven't reached the score threshold!")
-    if int(status) >=15:
-        if "Flappy Gene Master" not in rolelist:
-            ogrole = discord.utils.get(person.guild.roles, name = "Flappy Gene Master")
+    if int(status) >=50:
+        if "Doodle Gene Expert" not in rolelist:
+            ogrole = discord.utils.get(person.guild.roles, name = "Doodle Gene Expert")
             await person.add_roles(ogrole, atomic=True)
-            await ctx.channel.send(str(person) + ", congrats! Your role is now Flappy Gene Master.")
+            await ctx.channel.send(str(person) + ", congrats! Your role is now Doodle Gene Expert.")
         else:
-            await ctx.channel.send(str(person) + ", You already have OG role")
+            await ctx.channel.send(str(person) + ", You already have Doodle Gene Expert role")
     else:        
         await ctx.channel.send(str(person)+ ", please use the !play command to get your game code.")    
     
