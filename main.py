@@ -1,12 +1,45 @@
+from __future__ import print_function
+
 import discord
-
 from discord.ext import commands
+import time
+from config import *
 
-TOKEN='OTU1OTY0NTkwMzEzODQwNjYx.YjpVZw.b-SoCMYiAQP_LZ2_8yZFsQoWBB0'
+import firebase_admin
+from firebase_admin import auth
+from firebase_admin import credentials
+from firebase_admin import db
 
-client = discord.Client()
 
-bot = commands.Bot(command_prefix="!", description="invite bot")
+
+cred = credentials.Certificate(firebaseconfig)
+databaseApp = firebase_admin.initialize_app(cred,{'databaseURL':databaseURL})
+
+#client = discord.Client()
+
+bot = commands.Bot(command_prefix="!", description="game bot")
+
+
+# @client.event
+# async def on_message(message):
+
+#     if message.content.startswith('!whitelist'):
+#         personid = str(message.author.id)
+#         person=str(message.author.name)
+#         rows = read_range()
+#         print(rows)
+#         addy=str(message.content).split(" ",1)[1]
+#         print('addy is: '+str(addy))
+#         if str(personid) not in rows:
+
+#           DATA = [message.author.name] + [str(message.author.id)] + [str(message.created_at)] + [str(message.content).split(" ",1)[1]]
+#           add(SPREADSHEET_ID, RANGE_NAME, DATA)
+#           await message.channel.send(str(person) + ': ' + str(addy) +' has been whitelisted!')
+
+#         if str(personid) in rows:
+#           print('already registered')
+#           await message.channel.send(str(person)+': is already whitelisted!')
+#         #await message.channel.send("hello!")
 
 
 @bot.event
@@ -14,43 +47,72 @@ async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
 
+# @bot.command(pass_context=True)
+# async def write(ctx): # !write
+#     #color = input("pick a color")
+#     person= ctx.message.author
+#     user = ctx.message.id
+#     print(user, " is user id")
+#     ref = db.reference(f"/")
+#     ref.update({
+#         user: "nope"
+#         }
+#     )
+#     await message.channel.send(str(person)+", your login code is: "str(user))
+
 @bot.command(pass_context=True)
-async def invite(ctx): #!upgrade
+async def play(ctx): # !play
+    #color = input("pick a color")
     person= ctx.message.author
     user = ctx.message.author.id
-    
+    print(user, " is user id")
+    ref = db.reference(f"/")
+    ref2 = db.reference(f"/"+str(user))    
+    status2 = ref2.get()
+    #print(status2)
+    if status2 == None:
+        ref.update({
+            user: "nope"
+            }
+    )
+    await ctx.channel.send(str(person)+", your login code is: "+str(user))
+
+def letsee():
+    ref2 = db.reference(f"/"+"bobby") 
+    status2 = ref2.get()
+    print(status2)
+    if status2 == None:
+        print("caught")
+
+
+letsee()
+
+@bot.command(pass_context=True)
+async def upgrade(ctx): #!upgrade
+    person= ctx.message.author
+    user = ctx.message.author.id
+    ref = db.reference(f"/"+str(user))    
+    status = ref.get()
+    print("status: "+ str(status))
+
     rolelist=[]
     for role in person.roles:
         rolelist.append(role.name)
     print(rolelist)
-    x = await ctx.guild.invites()
-    print(x)
-    totalInvites = 0
-    for i in await ctx.guild.invites():
-        if i.inviter == ctx.author:
-            print(i.inviter)
-            totalInvites += i.uses
-    print(totalInvites)        
-    if totalInvites > 1:
-        if "CannaDAO cultivator" not in rolelist:
-            ogrole = discord.utils.get(person.guild.roles, name = "CannaDAO cultivator")
+
+    if status == "nope":
+        await ctx.channel.send(str(person) + ", you haven't reached the score threshold!")
+    if int(status) <30:
+        await ctx.channel.send(str(person) + ", you haven't reached the score threshold!")
+    if int(status) >=30:
+        if "OG DEGENeticist" not in rolelist:
+            ogrole = discord.utils.get(person.guild.roles, name = "OG DEGENeticist")
             await person.add_roles(ogrole, atomic=True)
-            embed = discord.Embed(title = person, description = str(person) + ", congrats! You are now an CannaDAO cultivator.")
-            embed.add_field(name = 'Invites: ',value = str(totalInvites), inline = False)
-            await ctx.channel.send(embed = embed)
-            
+            await ctx.channel.send(str(person) + ", congrats! You are now an OG DEGENeticist.")
         else:
-            embed = discord.Embed(title = person, description = str(person) + ", you already have CannaDAO cultivator role.")
-            embed.add_field(name = 'Invites: ',value = str(totalInvites), inline = False)
-            await ctx.channel.send(embed = embed)
-        
-    else:     
-        embed = discord.Embed(title = person, description= 'Not enough invites!')
-        embed.add_field(name = 'Invites: ',value = str(totalInvites), inline = False)
-        await ctx.channel.send(embed = embed)
-        
-
-
+            await ctx.channel.send(str(person) + ", You already have OG DEGENeticist role")
+    else:        
+        await ctx.channel.send(str(person)+ ", please use the !play command to get your game code.")    
     
-#client.run(TOKEN)
-bot.run(TOKEN)   
+
+bot.run(TOKEN)    
