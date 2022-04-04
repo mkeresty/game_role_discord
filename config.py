@@ -13,4 +13,4 @@ firebaseconfig= {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-tzv8d%40cryptogene-7bcbb.iam.gserviceaccount.com"
 }
 
-databaseURL="https://cryptogene-7bcbb-default-rtdb.firebaseio.com/"
+databaseURL="https://cryptogene-7bcbb2.firebaseio.com/"
